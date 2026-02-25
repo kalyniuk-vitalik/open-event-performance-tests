@@ -3,3 +3,4 @@ jmeter.log
 report/
 *.log
 apache-jmeter*/
+.DS_Store
