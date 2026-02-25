@@ -6,8 +6,8 @@ JMeter performance test scripts for Open Event API.
 
 | File | Description |
 |------|-------------|
-| api_separate_endpoints.jmx | Capacity test for separate API endpoints |
-| api_system_level_flow.jmx | System level load flow test |
+| api_separate_endpoints.jmx | Performance test for separate API endpoints |
+| api_system_level_flow.jmx | System level flow test |
 | api_events_pagesize.jmx | Events page size performance test |
 | api_speakers.jmx | Speakers endpoint performance test |
 
