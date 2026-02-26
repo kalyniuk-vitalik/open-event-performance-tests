@@ -68,23 +68,17 @@
             <stringProp name="Argument.value">${__P(LOOPS,1)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
-          <elementProp name="PAGES" elementType="Argument">
-            <stringProp name="Argument.name">PAGES</stringProp>
-            <stringProp name="Argument.value">${__P(PAGES,1)}</stringProp>
+          <elementProp name="SESSION_COUNT" elementType="Argument">
+            <stringProp name="Argument.name">SESSION_COUNT</stringProp>
+            <stringProp name="Argument.value">${__P(SESSION_COUNT,5)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
-            <stringProp name="Argument.desc">Max pages to fetch from paginated API responses (used for page[number])</stringProp>
+            <stringProp name="Argument.desc">Number of sessions to attach to each speaker</stringProp>
           </elementProp>
           <elementProp name="DATABASE_URL" elementType="Argument">
             <stringProp name="Argument.name">DATABASE_URL</stringProp>
             <stringProp name="Argument.value">${__P(DATABASE_URL,ec2-3-82-175-107.compute-1.amazonaws.com)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <stringProp name="Argument.desc">Database endpoint used by JDBC Connection Configuration</stringProp>
-          </elementProp>
-          <elementProp name="SESSION_COUNT" elementType="Argument">
-            <stringProp name="Argument.name">SESSION_COUNT</stringProp>
-            <stringProp name="Argument.value">${__P(SESSION_COUNT,1)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <stringProp name="Argument.desc">Number of sessions to attach to each speaker</stringProp>
           </elementProp>
         </collectionProp>
       </Arguments>
@@ -321,15 +315,6 @@
           </JSONPostProcessor>
           <hashTree/>
         </hashTree>
-        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="JSR223 Sampler" enabled="true">
-          <stringProp name="scriptLanguage">groovy</stringProp>
-          <stringProp name="parameters"></stringProp>
-          <stringProp name="filename"></stringProp>
-          <stringProp name="cacheKey">true</stringProp>
-          <stringProp name="script">vars.put(&apos;sesionsData&apos;,&apos;&apos;)
-</stringProp>
-        </JSR223Sampler>
-        <hashTree/>
         <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Loop create speakers" enabled="true">
           <boolProp name="LoopController.continue_forever">true</boolProp>
           <stringProp name="LoopController.loops">${SESSION_COUNT}</stringProp>
@@ -413,25 +398,14 @@
             <stringProp name="cacheKey">true</stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
-            <stringProp name="script">//def id = vars.get(&apos;SESSION_ID&apos;)
-//def cur = vars.get(&apos;SESSIONS_DATA&apos;)
-//
-//def item = &quot;&quot;&quot;{&quot;type&quot;:&quot;session&quot;,&quot;id&quot;:&quot;${id}&quot;}&quot;&quot;&quot;
-//if (cur == null || cur.isEmpty()) {
-//  vars.put(&apos;SESSIONS_DATA&apos;, item)
-//} else {
-//  vars.put(&apos;SESSIONS_DATA&apos;, cur + &quot;,&quot; + item)
-//}
+            <stringProp name="script">def id = vars.get(&apos;SESSION_ID&apos;)
+def cur = vars.get(&apos;SESSIONS_DATA&apos;)
 
-def id = vars.get(&apos;SESSION_ID&apos;)
-def cur = vars.get(&apos;sessionsData&apos;)
-
-// перший елемент без коми, наступні — з комою
 def item = &quot;&quot;&quot;{&quot;type&quot;:&quot;session&quot;,&quot;id&quot;:&quot;${id}&quot;}&quot;&quot;&quot;
 if (cur == null || cur.isEmpty()) {
-  vars.put(&apos;sessionsData&apos;, item)
+  vars.put(&apos;SESSIONS_DATA&apos;, item)
 } else {
-  vars.put(&apos;sessionsData&apos;, cur + &quot;,&quot; + item)
+  vars.put(&apos;SESSIONS_DATA&apos;, cur + &quot;,&quot; + item)
 }</stringProp>
             <stringProp name="scriptLanguage">groovy</stringProp>
           </JSR223Sampler>
@@ -461,7 +435,7 @@ if (cur == null || cur.isEmpty()) {
       },&#xd;
       &quot;sessions&quot;: {&#xd;
         &quot;data&quot;: [&#xd;
-        	${sessionsData}&#xd;
+        	${SESSIONS_DATA}&#xd;
         ]&#xd;
       }&#xd;
     },&#xd;
