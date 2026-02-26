@@ -78,6 +78,7 @@
             <stringProp name="Argument.name">INFLUX_DB</stringProp>
             <stringProp name="Argument.value">${__P(INFLUX_DB,http://localhost:8086/write?db=jmeter)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.desc">InfluxDB write endpoint. Default -&gt; local Influx (localhost). Override in CI with -JINFLUX_DB=http://&lt;VM_IP&gt;:8086/write?db=jmeter_gha to send metrics to VM (Grafana)</stringProp>
           </elementProp>
         </collectionProp>
       </Arguments>
