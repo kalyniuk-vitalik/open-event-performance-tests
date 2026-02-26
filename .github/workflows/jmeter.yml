@@ -1,5 +1,4 @@
 name: JMeter Performance Tests
-
 on:
   push:
     branches: [ main ]
@@ -11,15 +10,12 @@ on:
       duration:
         description: 'Duration in seconds'
         default: '60'
-
 jobs:
   performance-test:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
       - name: Install JMeter
         run: |
           wget https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.5.tgz
@@ -27,8 +23,7 @@ jobs:
           wget -q "https://search.maven.org/remotecontent?filepath=kg/apc/jmeter-plugins-manager/1.9/jmeter-plugins-manager-1.9.jar" -O apache-jmeter-5.5/lib/ext/jmeter-plugins-manager-1.9.jar
           wget -q "https://search.maven.org/remotecontent?filepath=kg/apc/cmdrunner/2.3/cmdrunner-2.3.jar" -O apache-jmeter-5.5/lib/cmdrunner-2.3.jar
           java -cp apache-jmeter-5.5/lib/ext/jmeter-plugins-manager-1.9.jar org.jmeterplugins.repository.PluginManagerCMDInstaller
-          apache-jmeter-5.5/bin/PluginsManagerCMD.sh install jpgc-graphs-basic,jpgc-tst,jpgc-casutg,jpgc-perfmon
-
+          apache-jmeter-5.5/bin/PluginsManagerCMD.sh install jpgc-graphs-basic,jpgc-tst,jpgc-casutg,jpgc-perfmon,jpgc-cmd
       - name: Run JMeter test
         run: |
           apache-jmeter-5.5/bin/jmeter.sh \
@@ -42,7 +37,6 @@ jobs:
             -JDURATION=${{ github.event.inputs.duration || '60' }} \
             -JLOOPS=-1 \
             -JTEST_TITLE="GitHub Actions Run"
-
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         if: always()
