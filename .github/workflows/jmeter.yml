@@ -36,6 +36,7 @@ jobs:
             -JRAMPUP=30 \
             -JDURATION=${{ github.event.inputs.duration || '60' }} \
             -JLOOPS=-1 \
+            -JINFLUX_DB=http://34.134.198.179:8086/write?db=jmeter_gha \
             -JTEST_TITLE="GitHub Actions Run"
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
