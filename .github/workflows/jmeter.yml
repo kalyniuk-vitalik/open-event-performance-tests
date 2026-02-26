@@ -24,10 +24,10 @@ jobs:
         run: |
           wget https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.5.tgz
           tar -xzf apache-jmeter-5.5.tgz
-          wget https://search.maven.org/remotecontent?filepath=kg/apc/cmdrunner/2.3/cmdrunner-2.3.jar -O apache-jmeter-5.5/lib/cmdrunner-2.3.jar
-          wget https://search.maven.org/remotecontent?filepath=kg/apc/jmeter-plugins-manager/1.9/jmeter-plugins-manager-1.9.jar -O apache-jmeter-5.5/lib/ext/jmeter-plugins-manager-1.9.jar
+          wget -q "https://search.maven.org/remotecontent?filepath=kg/apc/jmeter-plugins-manager/1.9/jmeter-plugins-manager-1.9.jar" -O apache-jmeter-5.5/lib/ext/jmeter-plugins-manager-1.9.jar
+          wget -q "https://search.maven.org/remotecontent?filepath=kg/apc/cmdrunner/2.3/cmdrunner-2.3.jar" -O apache-jmeter-5.5/lib/cmdrunner-2.3.jar
           java -cp apache-jmeter-5.5/lib/ext/jmeter-plugins-manager-1.9.jar org.jmeterplugins.repository.PluginManagerCMDInstaller
-          apache-jmeter-5.5/bin/PluginsManagerCMD.sh install jpgc-graphs-basic,jpgc-tst,jpgc-casutg
+          apache-jmeter-5.5/bin/PluginsManagerCMD.sh install jpgc-graphs-basic,jpgc-tst,jpgc-casutg,jpgc-perfmon
 
       - name: Run JMeter test
         run: |
