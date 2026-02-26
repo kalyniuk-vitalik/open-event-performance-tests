@@ -37,7 +37,10 @@ jobs:
             -JDURATION=${{ github.event.inputs.duration || '60' }} \
             -JLOOPS=-1 \
             -JINFLUX_DB=http://34.134.198.179:8086/write?db=jmeter_gha \
-            -JTEST_TITLE="GitHub Actions Run"
+            -JTEST_TITLE="GitHub Actions Run" \
+            -Jbackend_metrics_window_mode=timed \
+            -Jbackend_metrics_window=5000 \
+            -Jbackend_metrics_large_window=50000
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         if: always()
