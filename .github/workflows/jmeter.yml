@@ -6,16 +6,18 @@ on:
     inputs:
       threads:
         description: 'Number of threads'
-        default: '5'
+        default: '1'
       duration:
         description: 'Duration in seconds'
         default: '60'
+
 jobs:
   performance-test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
       - name: Install JMeter
         run: |
           wget https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.5.tgz
@@ -24,29 +26,106 @@ jobs:
           wget -q "https://search.maven.org/remotecontent?filepath=kg/apc/cmdrunner/2.3/cmdrunner-2.3.jar" -O apache-jmeter-5.5/lib/cmdrunner-2.3.jar
           java -cp apache-jmeter-5.5/lib/ext/jmeter-plugins-manager-1.9.jar org.jmeterplugins.repository.PluginManagerCMDInstaller
           apache-jmeter-5.5/bin/PluginsManagerCMD.sh install jpgc-graphs-basic,jpgc-tst,jpgc-casutg,jpgc-perfmon,jpgc-cmd,jpgc-csl
-      - name: Run JMeter test
+
+      # ── TEST 1 SYSTEM LEVEL───────────────────────────────────
+      - name: Run api_system_level_flow
         run: |
           apache-jmeter-5.5/bin/jmeter.sh \
             -n \
             -t open-event-api/api_system_level_flow.jmx \
-            -l results.csv \
-            -e -o html-report \
-            -j jmeter.log \
-            -JUSERS=${{ github.event.inputs.threads || '5' }} \
+            -l results-system-flow.csv \
+            -e -o html-report-system-flow \
+            -j jmeter-system-flow.log \
+            -JUSERS=${{ github.event.inputs.threads || '1' }} \
             -JRAMPUP=30 \
             -JDURATION=${{ github.event.inputs.duration || '60' }} \
             -JLOOPS=-1 \
-            -JINFLUX_DB=http://136.112.227.95:8086/write?db=jmeter_gha \
-            -JTEST_TITLE="GitHub Actions Run" \
+            -JINFLUX_DB=http://34.173.8.181:8086/write?db=jmeter_gha \
+            -JTEST_TITLE="GHA - system_level_flow" \
             -Jbackend_metrics_window_mode=timed \
             -Jbackend_metrics_window=5000 \
             -Jbackend_metrics_large_window=50000
+
+      # ── TEST 2: Separate Endpoints ───────────────────────────
+      - name: Run api_separate_endpoints
+        run: |
+          apache-jmeter-5.5/bin/jmeter.sh \
+            -n \
+            -t open-event-api/api_separate_endpoints.jmx \
+            -l results-separate-endpoints.csv \
+            -e -o html-report-separate-endpoints \
+            -j jmeter-separate-endpoints.log \
+            -JRAMPUP=30 \
+            -JDURATION=${{ github.event.inputs.duration || '60' }} \
+            -JLOOPS=-1 \
+            -JPOST_LOGIN=${{ github.event.inputs.threads || '1' }} \
+            -JGET_USERS=${{ github.event.inputs.threads || '1' }} \
+            -JPOST_EVENTS=${{ github.event.inputs.threads || '1' }} \
+            -JPOST_TICKETS=${{ github.event.inputs.threads || '1' }} \
+            -JGET_EVENTS=${{ github.event.inputs.threads || '1' }} \
+            -JSTARTUP_DELAY=5 \
+            -JINFLUX_DB=http://34.173.8.181:8086/write?db=jmeter_gha \
+            -JTEST_TITLE="GHA - separate_endpoints" \
+            -Jbackend_metrics_window_mode=timed \
+            -Jbackend_metrics_window=5000 \
+            -Jbackend_metrics_large_window=50000
+
+      # ── TEST 3: Events Pagesize ──────────────────────────────
+      - name: Run api_events_pagesize
+        run: |
+          apache-jmeter-5.5/bin/jmeter.sh \
+            -n \
+            -t open-event-api/api_events_pagesize.jmx \
+            -l results-events-pagesize.csv \
+            -e -o html-report-events-pagesize \
+            -j jmeter-events-pagesize.log \
+            -JUSERS=${{ github.event.inputs.threads || '1' }} \
+            -JRAMPUP=30 \
+            -JDURATION=${{ github.event.inputs.duration || '60' }} \
+            -JLOOPS=-1 \
+            -JPAGES=10 \
+            -JINFLUX_DB=http://34.173.8.181:8086/write?db=jmeter_gha \
+            -JTEST_TITLE="GHA - events_pagesize" \
+            -Jbackend_metrics_window_mode=timed \
+            -Jbackend_metrics_window=5000 \
+            -Jbackend_metrics_large_window=50000
+
+      # ── TEST 4: Speakers ─────────────────────────────────────
+      - name: Run api_speakers
+        run: |
+          apache-jmeter-5.5/bin/jmeter.sh \
+            -n \
+            -t open-event-api/api_speakers.jmx \
+            -l results-speakers.csv \
+            -e -o html-report-speakers \
+            -j jmeter-speakers.log \
+            -JUSERS=${{ github.event.inputs.threads || '1' }} \
+            -JRAMPUP=30 \
+            -JDURATION=${{ github.event.inputs.duration || '60' }} \
+            -JLOOPS=-1 \
+            -JSESSION_COUNT=5 \
+            -JINFLUX_DB=http://34.173.8.181:8086/write?db=jmeter_gha \
+            -JTEST_TITLE="GHA - speakers" \
+            -Jbackend_metrics_window_mode=timed \
+            -Jbackend_metrics_window=5000 \
+            -Jbackend_metrics_large_window=50000
+
+      # ── ARTIFACTS ────────────────────────────────────────────
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: jmeter-results
           path: |
-            results.csv
-            jmeter.log
-            html-report/
+            results-system-flow.csv
+            results-separate-endpoints.csv
+            results-events-pagesize.csv
+            results-speakers.csv
+            jmeter-system-flow.log
+            jmeter-separate-endpoints.log
+            jmeter-events-pagesize.log
+            jmeter-speakers.log
+            html-report-system-flow/
+            html-report-separate-endpoints/
+            html-report-events-pagesize/
+            html-report-speakers/
