@@ -80,6 +80,12 @@
             <stringProp name="Argument.metadata">=</stringProp>
             <stringProp name="Argument.desc">Database endpoint used by JDBC Connection Configuration</stringProp>
           </elementProp>
+          <elementProp name="INFLUX_DB" elementType="Argument">
+            <stringProp name="Argument.name">INFLUX_DB</stringProp>
+            <stringProp name="Argument.value">${__P(INFLUX_DB,http://localhost:8086/write?db=jmeter)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.desc">InfluxDB write endpoint. Default -&gt; local Influx (localhost). Override in CI with -JINFLUX_DB=http://&lt;VM_IP&gt;:8086/write?db=jmeter_gha to send metrics to VM (Grafana)</stringProp>
+          </elementProp>
         </collectionProp>
       </Arguments>
       <hashTree/>
@@ -227,7 +233,7 @@
             </elementProp>
             <elementProp name="influxdbUrl" elementType="Argument">
               <stringProp name="Argument.name">influxdbUrl</stringProp>
-              <stringProp name="Argument.value">http://localhost:8086/write?db=jmeter</stringProp>
+              <stringProp name="Argument.value">${INFLUX_DB}</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
             <elementProp name="application" elementType="Argument">
