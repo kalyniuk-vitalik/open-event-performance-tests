@@ -22,37 +22,19 @@ Performance testing suite for [Open Event API](https://github.com/fossasia/open-
 
 ## Architecture
 
+**Local Pipeline**
 ```
-┌─────────────────────────────────────────────────────────┐
-│                    LOCAL PIPELINE                        │
-│                                                         │
-│  Jenkins (localhost:8080)                               │
-│    └─ clones .jmx from GitHub (SSH)                    │
-│    └─ runs JMeter with parameters                       │
-│         ├─ Backend Listener ──► InfluxDB:jmeter         │
-│         │                           └─► Grafana :3000   │
-│         └─ artifacts: results.csv, jmeter.log, report/  │
-│                                                         │
-│  Telegraf ──────────────────► InfluxDB:telegraf         │
-│                                    └─► Grafana :3000    │
-└─────────────────────────────────────────────────────────┘
+Jenkins
+  └── JMeter ──► InfluxDB (db: jmeter) ──► Grafana
+Telegraf ────► InfluxDB (db: telegraf) ──► Grafana
+```
 
-┌─────────────────────────────────────────────────────────┐
-│                    CLOUD PIPELINE                        │
-│                                                         │
-│  git push / workflow_dispatch                           │
-│    └─ GitHub Actions (ubuntu-latest)                    │
-│         └─ installs JMeter + plugins                    │
-│         └─ runs 4 tests sequentially                    │
-│              ├─ Backend Listener ──► InfluxDB:jmeter_gha│
-│              │              (GCP VM) └─► Grafana :3000  │
-│              └─ uploads artifacts to GitHub             │
-│                                                         │
-│  GCP VM (e2-micro, us-central1)                        │
-│    ├─ InfluxDB  — DB: jmeter_gha                       │
-│    ├─ Grafana   — dashboards for cloud runs            │
-│    └─ Telegraf  — VM system metrics                    │
-└─────────────────────────────────────────────────────────┘
+**Cloud Pipeline**
+```
+git push / workflow_dispatch
+  └── GitHub Actions
+        └── JMeter ──► GCP VM: InfluxDB (db: jmeter_gha) ──► Grafana
+              GCP VM: Telegraf ────────────────────────────► Grafana
 ```
 
 > Local and cloud pipelines are fully isolated.  
