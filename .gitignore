@@ -1,6 +1,16 @@
+# JMeter test results
 results.csv
-jmeter.log
-report/
+results-*.csv
 *.log
+report/
+html-report-*/
+
+# JMeter binary (stored in ~/Tools/, not in repo)
 apache-jmeter*/
+
+# macOS
 .DS_Store
+
+# IDE
+.idea/
+*.iml
