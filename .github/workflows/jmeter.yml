@@ -32,7 +32,7 @@ jobs:
         run: |
           apache-jmeter-5.5/bin/jmeter.sh \
             -n \
-            -t open-event-api/api_system_level_flow.jmx \
+            -t test-plans/api_system_level_flow.jmx \
             -l results-system-flow.csv \
             -e -o html-report-system-flow \
             -j jmeter-system-flow.log \
@@ -51,7 +51,7 @@ jobs:
         run: |
           apache-jmeter-5.5/bin/jmeter.sh \
             -n \
-            -t open-event-api/api_separate_endpoints.jmx \
+            -t test-plans/api_separate_endpoints.jmx \
             -l results-separate-endpoints.csv \
             -e -o html-report-separate-endpoints \
             -j jmeter-separate-endpoints.log \
@@ -75,7 +75,7 @@ jobs:
         run: |
           apache-jmeter-5.5/bin/jmeter.sh \
             -n \
-            -t open-event-api/api_events_pagesize.jmx \
+            -t test-plans/api_events_pagesize.jmx \
             -l results-events-pagesize.csv \
             -e -o html-report-events-pagesize \
             -j jmeter-events-pagesize.log \
@@ -95,7 +95,7 @@ jobs:
         run: |
           apache-jmeter-5.5/bin/jmeter.sh \
             -n \
-            -t open-event-api/api_speakers.jmx \
+            -t test-plans/api_speakers.jmx \
             -l results-speakers.csv \
             -e -o html-report-speakers \
             -j jmeter-speakers.log \
