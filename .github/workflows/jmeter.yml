@@ -1,4 +1,4 @@
-name: JMeter Performance Tests
+name: Open Event API Performance Tests
 on:
   push:
     branches: [ main ]
