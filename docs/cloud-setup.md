@@ -5,7 +5,7 @@ Cloud pipeline runs the same JMeter scenarios automatically on every push to `ma
 ## Components
 
 | Tool | Where | Purpose |
-|-----------|-------------|
+|------|-------|---------|
 | GitHub Actions | GitHub-hosted runner | Test execution |
 | GCP VM (e2-micro, us-central1) | Google Cloud | Hosts InfluxDB + Grafana + Telegraf |
 | InfluxDB 1.x | GCP VM | Metrics storage (db: jmeter_gha) |
@@ -27,10 +27,10 @@ GitHub Actions ──► JMeter ──► GCP VM: InfluxDB (db: jmeter_gha) ─�
 
 ## Pipeline Isolation
 
-Local and cloud pipelines write to separate InfluxDB databases. The `INFLUX_DB` parameter defaults to `localhost` for local runs and is overridden via GitHub Secret for cloud runs — same `.jmx` files work in both environments.
+Local and cloud pipelines write to separate InfluxDB databases. The `INFLUX_DB` parameter defaults to `localhost` for local runs and is overridden via GitHub Secret for cloud runs - same `.jmx` files work in both environments.
 
 | Pipeline | Host | Database |
-|-----------|-------------|
+|---------|------|---------|
 | Jenkins (local) | localhost:8086 | jmeter |
 | GitHub Actions | GCP VM:8086 | jmeter_gha |
 
@@ -43,9 +43,9 @@ Local and cloud pipelines write to separate InfluxDB databases. The `INFLUX_DB` 
 **Firewall rules:**
 
 | Port | Source | Purpose |
-|-----------|-------------|
-| 8086 | 0.0.0.0/0 | InfluxDB — GitHub Actions uses dynamic IPs |
-| 3000 | your IP | Grafana — restrict access |
+|------|--------|---------|
+| 8086 | 0.0.0.0/0 | InfluxDB - GitHub Actions uses dynamic IPs |
+| 3000 | your IP | Grafana - restrict access |
 
 ---
 
@@ -64,14 +64,14 @@ influx -execute 'CREATE DATABASE jmeter_gha'
 Installed via apt. Data sources:
 
 | Name | Query Language | URL | Database |
-|-----------|-------------|----------|
+|------|---------------|-----|---------|
 | jmeter | InfluxQL | http://localhost:8086 | jmeter_gha |
 | telegraf | InfluxQL | http://localhost:8086 | telegraf |
 
 Import dashboards from [`/dashboards`](../dashboards/):
 
 | Dashboard | Data Source |
-|-----------|-------------|
+|-----------|------------|
 | JMeter Load Test Monitoring | jmeter |
 | JMeter Comparison Dashboard | jmeter |
 | Telegraf: System Dashboard | telegraf |
@@ -104,7 +104,7 @@ Import dashboards from [`/dashboards`](../dashboards/):
 |------|-------|
 | `INFLUX_WRITE_URL` | `http://<VM_IP>:8086/write?db=jmeter_gha` |
 
-> GCP VM IP changes on restart — update this secret accordingly.
+> GCP VM IP changes on restart - update this secret accordingly.
 
 **Key workflow parameters per step:**
 

@@ -5,14 +5,14 @@ Local pipeline runs JMeter tests through Jenkins CI with real-time metrics strea
 ## Components
 
 | Tool | Version | Purpose |
-|-----------|-------------|
+|------|---------|---------|
 | Apache JMeter | 5.5 | Test execution |
 | InfluxDB | 1.x | Metrics storage |
 | Grafana | 12.x | Dashboards |
 | Telegraf | 1.x | System metrics agent |
 | Jenkins | LTS | CI orchestration |
 
-> InfluxDB 1.x is required. Version 2.x uses Flux — incompatible with JMeter Backend Listener and standard Grafana dashboards.
+> InfluxDB 1.x is required. Version 2.x uses Flux - incompatible with JMeter Backend Listener and standard Grafana dashboards.
 
 ---
 
@@ -21,7 +21,7 @@ Local pipeline runs JMeter tests through Jenkins CI with real-time metrics strea
 Jenkins clones this repository via SSH, executes the selected `.jmx` file with build parameters, and archives results. During the test, JMeter streams metrics to InfluxDB via Backend Listener. Grafana reads from InfluxDB and displays live dashboards. Telegraf independently collects system metrics into a separate `telegraf` database.
 
 ```
-Jenkins ──► JMeter ──► InfluxDB (db: jmeter)   ──► Grafana
+Jenkins ──► JMeter ──► InfluxDB (db: jmeter) ──► Grafana
 Telegraf ──────────► InfluxDB (db: telegraf) ──► Grafana
 ```
 
@@ -83,14 +83,14 @@ Start: `./bin/grafana-server` (port 3000)
 **Data sources:**
 
 | Name | Query Language | URL | Database |
-|-----------|-------------|----------|
+|------|---------------|-----|---------|
 | jmeter | InfluxQL | http://localhost:8086 | jmeter |
 | telegraf | InfluxQL | http://localhost:8086 | telegraf |
 
-**Dashboards** — import from [`/dashboards`](../dashboards/):
+**Dashboards** - import from [`/dashboards`](../dashboards/):
 
 | Dashboard | Data Source |
-|-----------|-------------|
+|-----------|------------|
 | JMeter Load Test Monitoring | jmeter |
 | JMeter Comparison Dashboard | jmeter |
 | Linux System Overview | telegraf |
@@ -106,7 +106,7 @@ org_role = Viewer
 
 ---
 
-## JMeter — Backend Listener
+## JMeter - Backend Listener
 
 Each `.jmx` file contains a Backend Listener configured to write to InfluxDB:
 
@@ -119,7 +119,7 @@ Each `.jmx` file contains a Backend Listener configured to write to InfluxDB:
 Each scenario uses a unique `application` field to allow filtering in Grafana:
 
 | File | application |
-|------|-------------|
+|------|------------|
 | api_system_level_flow.jmx | system_level_flow |
 | api_separate_endpoints.jmx | separate_endpoints |
 | api_events_pagesize.jmx | events_pagesize |
@@ -135,12 +135,12 @@ Start: `java -jar jenkins.war --httpPort=8080`
 
 **Plugins:** HTML Publisher, Groovy Postbuild (Git is pre-installed)
 
-**SSH credentials** — repository is cloned via SSH key stored in Jenkins credentials (`github-ssh`).
+**SSH credentials** - repository is cloned via SSH key stored in Jenkins credentials (`github-ssh`).
 
 **Four Freestyle jobs**, one per scenario:
 
 | Job | Test file |
-|-----|-----------|
+|-----|----------|
 | OpenEvent_SystemLevelFlow | api_system_level_flow.jmx |
 | OpenEvent_SeparateEndpoints | api_separate_endpoints.jmx |
 | OpenEvent_EventsPageSize | api_events_pagesize.jmx |
@@ -150,7 +150,7 @@ Each job is parameterized with USERS, RAMPUP, DURATION, LOOPS, TEST_TITLE. Build
 
 ```bash
 /Users/<user>/Tools/apache-jmeter-5.5/bin/jmeter.sh -n \
-  -t open-event-api/api_system_level_flow.jmx \
+  -t test-plans/api_system_level_flow.jmx \
   -l results.csv -j jmeter.log -e -o report -f \
   -JUSERS=$USERS -JRAMPUP=$RAMPUP \
   -JDURATION=$DURATION -JLOOPS=$LOOPS \
