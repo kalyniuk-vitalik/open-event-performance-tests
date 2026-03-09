@@ -1,6 +1,6 @@
 # Performance Results — Open Event API
 
-> 📄 [Full Performance Test Report (PDF)](docs/Performance_Test_Report_Kalyniuk.pdf)
+> 📄 [Full Performance Test Report (PDF)](docs/Performance_Test_Report_Open_Event_API.pdf)
 
 ---
 
@@ -11,7 +11,7 @@
 | System Capacity | Max stable throughput | 5 RPS at 5 threads |
 | Slowest endpoint | GET /v1/events | 2 RPS at 4 threads |
 | Fastest endpoint | POST /v1/events | 9.2 RPS at 10 threads |
-| Load Test stability | ~2 RPS, 0% errors | ✅ Stable |
+| Load Test stability | ~2 RPS, 0% errors | Stable |
 | POST /v1/speakers degradation | 1 → 50 sessions | 782ms → 3,030ms (+287%) |
 | GET /v1/events degradation | page[size] 10 → 50 | 935ms → 1,690ms (+81%) |
 
