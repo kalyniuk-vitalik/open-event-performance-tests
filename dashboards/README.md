@@ -1,24 +1,24 @@
 # Grafana Dashboards
 
-Pre-configured Grafana dashboards stored as JSON exports — ready to import.
+Real-time dashboards used during performance test sessions.
 
-## How to import
+---
 
-1. Grafana → Dashboards → **Import**
-2. Upload JSON file
-3. Select correct datasource (`jmeter` or `telegraf`)
+## Dashboard Overview
 
-## Dashboards
+| Dashboard | Base ID | Data Source | Purpose |
+|-----------|---------|-------------|---------|
+| JMeter Load Test Monitoring | 1152 (customized) | InfluxDB `jmeter` / `jmeter_gha` | Active threads, RPS, response time, error rate |
+| JMeter Comparison Dashboard | 5496 (customized) | InfluxDB `jmeter` / `jmeter_gha` | Side-by-side comparison across test runs |
+| Linux System Overview | 928 (customized) | InfluxDB `telegraf` | CPU/RAM/Disk/Network during test |
 
-| File | Dashboard | Data Source |
-|-----------|-------------|-------------|
-| `jmeter-load-test.json` | JMeter Load Test Monitoring | jmeter |
-| `jmeter-comparison.json` | JMeter Comparison Dashboard | jmeter |
-| `server-monitoring-local.json` | Linux System Overview (local) | telegraf |
-| `server-monitoring-cloud.json` | Telegraf: System Dashboard (cloud) | telegraf |
+---
 
-## How to export (to update)
+## Setup
 
-1. Open dashboard in Grafana
-2. Click **Share** (top right) → **Export** tab
-3. **Save to file** → replace JSON here
+Dashboards are not exported as JSON - they contain local InfluxDB data source references that are environment-specific.
+
+To reproduce:
+1. Install Grafana and import community dashboards by ID (1152, 5496, 928)
+2. Configure data sources per [../docs/local-setup.md](../docs/local-setup.md) or [../docs/cloud-setup.md](../docs/cloud-setup.md)
+3. Set `backend_metrics_window_mode=timed` in `jmeter.properties` for accurate real-time percentiles
