@@ -772,7 +772,7 @@ if (name != null &amp;&amp; name.startsWith(&apos;setup auth |&apos;)) {
             </elementProp>
             <elementProp name="percentiles" elementType="Argument">
               <stringProp name="Argument.name">percentiles</stringProp>
-              <stringProp name="Argument.value">90;95;99</stringProp>
+              <stringProp name="Argument.value">50;90;95;99</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
             <elementProp name="testTitle" elementType="Argument">
