@@ -153,25 +153,3 @@ open-event-performance-tests/
 ├── PERFORMANCE_RESULTS.md              # Test results summary
 └── README.md
 ```
-
----
-
-## Key Design Decisions
-
-**Why InfluxDB 1.x?**  
-JMeter Backend Listener uses the v1 write API (`/write?db=...`). InfluxDB 2.x requires Flux queries - incompatible with standard Grafana JMeter dashboards.
-
-**Why sequential tests in GitHub Actions (not matrix)?**  
-Parallel execution puts concurrent load on the API server, making results unreliable. Sequential runs give clean, isolated measurements per scenario.
-
-**Why separate Jenkins jobs per JMX?**  
-Independent build history, separate Grafana time-range links per test, and the ability to run specific scenarios without triggering the full suite.
-
-**Why `backend_metrics_window_mode=timed`?**  
-Default `fixed` mode accumulates metrics from test start - percentiles become increasingly smoothed and diverge from HTML Aggregate Report. `timed` mode recalculates every 5s window for accurate real-time percentiles.
-
-**Why SSH instead of HTTPS for Git?**  
-macOS Keychain stores old HTTPS credentials and returns 403. SSH key bypasses this completely.
-
-**Why two separate pipelines (Jenkins + GitHub Actions)?**  
-GitHub Actions runs smoke tests automatically on every push for fast CI feedback. Jenkins is used for full test sessions with detailed analytics in Grafana - load generator and target are on the same network, giving more stable and reliable results.
